@@ -200,28 +200,66 @@
           <circle cx="320" cy="270" r="5" fill="#43a047"/>
           <circle cx="380" cy="270" r="6" fill="#43a047"/>
         </g>
-        <!-- Mount post: back-right of bed, holds the panel hinge above the bed -->
+        <!-- Mount post: back-LEFT of bed, holds the panel hinge above the bed -->
         <g id="mount">
-          <rect x="471" y="170" width="8" height="100" fill="#6d4c41" stroke="#3e2723" stroke-width="1"/>
-          <line x1="471" y1="170" x2="479" y2="170" stroke="#8d6e63" stroke-width="2"/>
+          <rect x="92" y="170" width="8" height="100" fill="#6d4c41" stroke="#3e2723" stroke-width="1"/>
+          <line x1="92" y1="170" x2="100" y2="170" stroke="#8d6e63" stroke-width="2"/>
         </g>
-        <!-- Panel: side-profile bezel. Length 130, side thickness 12.
-             Pivots at (475, 170) — top of the post.
-             Total height when vertical (tilt=90) ≈ 7ft at the booth's chosen scale. -->
-        <g id="frame" transform="rotate(0 475 170)">
+        <!-- Panel: side-profile bezel, FULL BED WIDTH (400u long), 12u side thickness.
+             Pivots at (100, 170) — top of the post.
+             Visual rotation CLAMPED to 22° max to keep the panel in viewBox.
+             The real angle (0-90°) is shown in the tilt gauge below.
+             Total height when vertical (tilt=90) would be ~11ft, so the clamp is necessary. -->
+        <g id="frame" transform="rotate(0 100 170)">
           <!-- Bezel: top + bottom frame strips -->
-          <rect x="345" y="164" width="130" height="2" fill="#8d6e63"/>
-          <rect x="345" y="174" width="130" height="2" fill="#8d6e63"/>
+          <rect x="100" y="164" width="400" height="2" fill="#8d6e63"/>
+          <rect x="100" y="174" width="400" height="2" fill="#8d6e63"/>
           <!-- Cell area (subtle glass tint) -->
-          <rect x="345" y="166" width="130" height="8" fill="rgba(20,40,80,0.18)"/>
-          <!-- Cell column dividers (5 across, suggesting the cell array) -->
+          <rect x="100" y="166" width="400" height="8" fill="rgba(20,40,80,0.18)"/>
+          <!-- Cell column dividers (19 across, every 20u, suggesting the cell array) -->
           <g stroke="#5d4037" stroke-width="0.4" opacity="0.6">
-            <line x1="365" y1="166" x2="365" y2="174"/>
-            <line x1="385" y1="166" x2="385" y2="174"/>
-            <line x1="405" y1="166" x2="405" y2="174"/>
-            <line x1="425" y1="166" x2="425" y2="174"/>
-            <line x1="445" y1="166" x2="445" y2="174"/>
+            <line x1="120" y1="166" x2="120" y2="174"/>
+            <line x1="140" y1="166" x2="140" y2="174"/>
+            <line x1="160" y1="166" x2="160" y2="174"/>
+            <line x1="180" y1="166" x2="180" y2="174"/>
+            <line x1="200" y1="166" x2="200" y2="174"/>
+            <line x1="220" y1="166" x2="220" y2="174"/>
+            <line x1="240" y1="166" x2="240" y2="174"/>
+            <line x1="260" y1="166" x2="260" y2="174"/>
+            <line x1="280" y1="166" x2="280" y2="174"/>
+            <line x1="300" y1="166" x2="300" y2="174"/>
+            <line x1="320" y1="166" x2="320" y2="174"/>
+            <line x1="340" y1="166" x2="340" y2="174"/>
+            <line x1="360" y1="166" x2="360" y2="174"/>
+            <line x1="380" y1="166" x2="380" y2="174"/>
+            <line x1="400" y1="166" x2="400" y2="174"/>
+            <line x1="420" y1="166" x2="420" y2="174"/>
+            <line x1="440" y1="166" x2="440" y2="174"/>
+            <line x1="460" y1="166" x2="460" y2="174"/>
+            <line x1="480" y1="166" x2="480" y2="174"/>
           </g>
+        </g>
+        <!-- Tilt gauge: shows the REAL panel angle (0-90°).
+             Sits in the swing area below the panel, to the right of the post.
+             Center (130, 220), radius 22, arc from 0° (right) to 90° (up). -->
+        <g id="tilt-gauge" opacity="0.85">
+          <!-- Background arc, 0° to 90° in upper-right quadrant -->
+          <path d="M 152 220 A 22 22 0 0 0 130 198" fill="none" stroke="#90a4ae" stroke-width="1.2" stroke-dasharray="2,2"/>
+          <!-- Tick at 0° (horizontal) -->
+          <line x1="152" y1="220" x2="157" y2="220" stroke="#cfd8dc" stroke-width="1"/>
+          <!-- Tick at 45° -->
+          <line x1="145.6" y1="204.4" x2="149.1" y2="200.9" stroke="#cfd8dc" stroke-width="1"/>
+          <!-- Tick at 90° (vertical) -->
+          <line x1="130" y1="198" x2="130" y2="193" stroke="#cfd8dc" stroke-width="1"/>
+          <!-- Center dot -->
+          <circle cx="130" cy="220" r="1.5" fill="#cfd8dc"/>
+          <!-- Needle: rotates with REAL angle (0 = horizontal, 90 = up) -->
+          <line id="tilt-needle" x1="130" y1="220" x2="152" y2="220" stroke="#ff9800" stroke-width="1.6" stroke-linecap="round"/>
+          <!-- Labels -->
+          <text x="160" y="223" font-size="7" fill="#90a4ae" font-family="ui-monospace,monospace">0°</text>
+          <text x="133" y="190" font-size="7" fill="#90a4ae" font-family="ui-monospace,monospace">90°</text>
+          <text x="130" y="252" font-size="8" fill="#90a4ae" text-anchor="middle">tilt</text>
+          <text id="tilt-value" x="130" y="264" font-size="10" fill="#ff9800" text-anchor="middle" font-family="ui-monospace,monospace" font-weight="600">0°</text>
         </g>
       </svg>
       <div class="reason" id="reason">Decision: <b>--</b></div>
@@ -562,8 +600,7 @@ function render() {
   // Bed shadow
   const shadowEl = document.getElementById('bedshadow');
   if (alt > 0) {
-    const tilt = liveVal('panel_tilt') !== undefined ? liveVal('panel_tilt') : sim.tilt;
-    const panelH = 130;
+    const panelH = 400;
     const shadowLen = panelH / Math.max(0.05, Math.tan(alt));
     const sw = Math.min(500 - 100, Math.abs(shadowLen) * 0.5);
     if (az > Math.PI) {
@@ -577,12 +614,28 @@ function render() {
   }
 
   // Frame rotation
-  // Pivot at (475, 170) — top of mount post.
-  // Panel extends to the LEFT of the pivot at tilt=0 (lying flat over the bed).
-  // Positive rotation (CCW) lifts the left end → panel face tilts toward the sun (right).
-  const tiltForFrame = liveVal('panel_tilt') !== undefined ? liveVal('panel_tilt') : sim.tilt;
+  // Pivot at (100, 170) — top of mount post (back-LEFT of bed).
+  // Panel extends to the RIGHT of the pivot at tilt=0 (lying flat over the bed).
+  // Positive rotation (CCW) lifts the right end → panel face tilts toward the sun (right).
+  // Visual rotation is CLAMPED to 22° to keep the panel inside the viewBox;
+  // the real angle is shown in the tilt gauge below.
+  const TILT_VISUAL_MAX = 22;
+  const tiltReal = liveVal('panel_tilt') !== undefined ? liveVal('panel_tilt') : sim.tilt;
+  const tiltVisual = Math.max(0, Math.min(TILT_VISUAL_MAX, tiltReal));
   const frame = document.getElementById('frame');
-  frame.setAttribute('transform', `rotate(${tiltForFrame} 475 170)`);
+  frame.setAttribute('transform', `rotate(${-tiltVisual} 100 170)`);
+
+  // Tilt gauge needle — shows REAL angle 0-90°
+  const needle = document.getElementById('tilt-needle');
+  if (needle) {
+    // Clamp needle to gauge range 0-90° so it doesn't wrap past the arc
+    const needleAngle = Math.max(0, Math.min(90, tiltReal));
+    needle.setAttribute('transform', `rotate(${-needleAngle} 130 220)`);
+  }
+  const tiltVal = document.getElementById('tilt-value');
+  if (tiltVal) {
+    tiltVal.textContent = fmt(tiltReal, 0) + '°';
+  }
 
   // ---- Numbers (live overrides sim) ----
   // kWh today
@@ -591,7 +644,7 @@ function render() {
   document.getElementById('kwh').textContent = fmt(kwh, 2);
   document.getElementById('kwh-target').textContent = fmt(7.5, 1);
   document.getElementById('kwh-meter').style.width = Math.min(100, kwh / 7.5 * 100) + '%';
-  const poa = poaIrradiance(tiltForFrame, minOfDay);
+  const poa = poaIrradiance(tiltReal, minOfDay);
   document.getElementById('poa').textContent = fmt(poa, 0) + ' W/m²';
   setLiveDot('dot-kwh', kwhLive);
 
