@@ -185,29 +185,42 @@
           </radialGradient>
         </defs>
         <rect width="600" height="320" fill="url(#sky)"/>
-        <rect x="0" y="280" width="600" height="40" fill="#1a1f25"/>
-        <line x1="0" y1="280" x2="600" y2="280" stroke="#30363d" stroke-width="1"/>
+        <rect x="0" y="300" width="600" height="20" fill="#1a1f25"/>
+        <line x1="0" y1="300" x2="600" y2="300" stroke="#30363d" stroke-width="1"/>
         <g id="bed">
-          <rect x="100" y="220" width="400" height="60" fill="#5d4037" stroke="#3e2723" stroke-width="2" rx="2"/>
-          <rect x="105" y="225" width="390" height="50" fill="url(#bedfill)"/>
+          <rect x="100" y="270" width="400" height="30" fill="#5d4037" stroke="#3e2723" stroke-width="2" rx="2"/>
+          <rect x="105" y="275" width="390" height="20" fill="url(#bedfill)"/>
         </g>
-        <polygon id="bedshadow" points="100,220 500,220 500,280 100,280" fill="#000" opacity="0.5"/>
+        <polygon id="bedshadow" points="100,270 500,270 500,300 100,300" fill="#000" opacity="0.5"/>
         <circle id="sun-disc" cx="450" cy="80" r="30" fill="url(#sungrad)"/>
-        <line id="sun-ray" x1="450" y1="80" x2="300" y2="220" stroke="#ffb74d" stroke-width="2" stroke-dasharray="6,4" opacity="0.5"/>
+        <line id="sun-ray" x1="450" y1="80" x2="300" y2="270" stroke="#ffb74d" stroke-width="2" stroke-dasharray="6,4" opacity="0.5"/>
         <g id="plants" opacity="0.9">
-          <circle cx="180" cy="220" r="6" fill="#43a047"/>
-          <circle cx="240" cy="220" r="7" fill="#43a047"/>
-          <circle cx="320" cy="220" r="6" fill="#43a047"/>
-          <circle cx="380" cy="220" r="7" fill="#43a047"/>
+          <circle cx="180" cy="270" r="5" fill="#43a047"/>
+          <circle cx="240" cy="270" r="6" fill="#43a047"/>
+          <circle cx="320" cy="270" r="5" fill="#43a047"/>
+          <circle cx="380" cy="270" r="6" fill="#43a047"/>
         </g>
-        <g id="frame" transform="rotate(0 100 220)">
-          <rect x="100" y="100" width="400" height="120" fill="none" stroke="#8d6e63" stroke-width="3"/>
-          <rect x="110" y="110" width="380" height="100" fill="#1a3a6e" stroke="#0d1f3a" stroke-width="1"/>
-          <g stroke="#3a5a8e" stroke-width="0.5" opacity="0.5">
-            <line x1="205" y1="110" x2="205" y2="210"/>
-            <line x1="300" y1="110" x2="300" y2="210"/>
-            <line x1="395" y1="110" x2="395" y2="210"/>
-            <line x1="110" y1="160" x2="490" y2="160"/>
+        <!-- Mount post: back-right of bed, holds the panel hinge above the bed -->
+        <g id="mount">
+          <rect x="471" y="170" width="8" height="100" fill="#6d4c41" stroke="#3e2723" stroke-width="1"/>
+          <line x1="471" y1="170" x2="479" y2="170" stroke="#8d6e63" stroke-width="2"/>
+        </g>
+        <!-- Panel: side-profile bezel. Length 130, side thickness 12.
+             Pivots at (475, 170) — top of the post.
+             Total height when vertical (tilt=90) ≈ 7ft at the booth's chosen scale. -->
+        <g id="frame" transform="rotate(0 475 170)">
+          <!-- Bezel: top + bottom frame strips -->
+          <rect x="345" y="164" width="130" height="2" fill="#8d6e63"/>
+          <rect x="345" y="174" width="130" height="2" fill="#8d6e63"/>
+          <!-- Cell area (subtle glass tint) -->
+          <rect x="345" y="166" width="130" height="8" fill="rgba(20,40,80,0.18)"/>
+          <!-- Cell column dividers (5 across, suggesting the cell array) -->
+          <g stroke="#5d4037" stroke-width="0.4" opacity="0.6">
+            <line x1="365" y1="166" x2="365" y2="174"/>
+            <line x1="385" y1="166" x2="385" y2="174"/>
+            <line x1="405" y1="166" x2="405" y2="174"/>
+            <line x1="425" y1="166" x2="425" y2="174"/>
+            <line x1="445" y1="166" x2="445" y2="174"/>
           </g>
         </g>
       </svg>
@@ -550,13 +563,13 @@ function render() {
   const shadowEl = document.getElementById('bedshadow');
   if (alt > 0) {
     const tilt = liveVal('panel_tilt') !== undefined ? liveVal('panel_tilt') : sim.tilt;
-    const panelH = 120;
+    const panelH = 130;
     const shadowLen = panelH / Math.max(0.05, Math.tan(alt));
     const sw = Math.min(500 - 100, Math.abs(shadowLen) * 0.5);
     if (az > Math.PI) {
-      shadowEl.setAttribute('points', `${100},220 ${100 + sw},220 ${100 + sw},280 ${100},280`);
+      shadowEl.setAttribute('points', `${100},270 ${100 + sw},270 ${100 + sw},300 ${100},300`);
     } else {
-      shadowEl.setAttribute('points', `${500 - sw},220 ${500},220 ${500},280 ${500 - sw},280`);
+      shadowEl.setAttribute('points', `${500 - sw},270 ${500},270 ${500},300 ${500 - sw},300`);
     }
     shadowEl.setAttribute('opacity', 0.4);
   } else {
@@ -564,9 +577,12 @@ function render() {
   }
 
   // Frame rotation
+  // Pivot at (475, 170) — top of mount post.
+  // Panel extends to the LEFT of the pivot at tilt=0 (lying flat over the bed).
+  // Positive rotation (CCW) lifts the left end → panel face tilts toward the sun (right).
   const tiltForFrame = liveVal('panel_tilt') !== undefined ? liveVal('panel_tilt') : sim.tilt;
   const frame = document.getElementById('frame');
-  frame.setAttribute('transform', `rotate(${-tiltForFrame} 100 220)`);
+  frame.setAttribute('transform', `rotate(${tiltForFrame} 475 170)`);
 
   // ---- Numbers (live overrides sim) ----
   // kWh today
